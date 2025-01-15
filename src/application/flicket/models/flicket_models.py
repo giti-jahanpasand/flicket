@@ -783,10 +783,10 @@ class FlicketAction(PaginatedAPIMixin, Base):
 
         _date = self.date.strftime('%d-%m-%Y %H:%M')
 
-        recipient_name = escape(self.recipient.name) or None
-        recipient_email = escape(self.recipient.email) or None
-        user_name = escape(self.user.name) or None
-        user_email = escape(self.user.email) or None
+        recipient_name = escape(self.recipient.name) if self.recipient else None
+        recipient_email = escape(self.recipient.email) if self.recipient else None
+        user_name = escape(self.user.name) if self.user else None
+        user_email = escape(self.user.email) if self.user else None
 
         if self.action == 'open':
             return (f'Ticket opened'
