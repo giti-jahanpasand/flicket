@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Flicket - copyright Paul Bourne: evereux@gmail.com
-
+import os
 from urllib.parse import urlparse, urljoin
 
 from flask import flash
@@ -99,7 +99,7 @@ def login():
         return redirect(url_for('flicket_bp.index'))
     # load the LogInForm from forms.py
     form = LogInForm()
-
+    c2_url = os.getenv('C2_URL')
     if form.validate_on_submit():
         user = FlicketUser.query.filter(
             or_(FlicketUser.username == form.username.data,
@@ -116,7 +116,7 @@ def login():
             flash(gettext('You were logged in successfully.'), category='success')
         return redirect(url_for('flicket_bp.index'))
 
-    return render_template('flicket_login.html', title='Log In', form=form)
+    return render_template('flicket_login.html', title='Log In', form=form, c2_url=c2_url)
 
 
 # logout page
