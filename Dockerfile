@@ -20,5 +20,8 @@ COPY . .
 # Expose the application port
 EXPOSE 5000
 WORKDIR /app/src
+
+COPY entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
 # Entry point to run the necessary commands before starting the app
-ENTRYPOINT ["sh", "-c", "python create_db_config.py && flask db upgrade && flask run-set-up && gunicorn --bind 0.0.0.0:5000 application:app"]
+ENTRYPOINT ["bash", "-c", "./entrypoint.sh"]
