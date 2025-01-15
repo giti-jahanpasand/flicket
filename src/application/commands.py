@@ -8,7 +8,7 @@ import os
 import time
 from dotenv import load_dotenv
 from sqlalchemy import or_
-
+from application.flicket.models.flicket_models_ext import FlicketTicketExt
 from scripts.create_json import WriteConfigJson
 from application import db, app
 from application.flicket_admin.models.flicket_config import FlicketConfig
@@ -29,8 +29,7 @@ admin = 'admin'
 
 # configuration defaults for flicket
 flicket_config = {'posts_per_page': 50,
-                  'allowed_extensions': ['txt', 'log', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'msg', 'doc', 'docx', 'ppt',
-                                         'pptx', 'xls', 'xlsx'],
+                  'allowed_extensions': ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff', 'webp', 'ico', 'heif', 'avif'],
                   'ticket_upload_folder': 'application/flicket/static/flicket_uploads',
                   'avatar_upload_folder': 'application/flicket/static/flicket_avatars',
                   }
@@ -258,6 +257,26 @@ def set_email_config(silent=False):
                 'Setting email settings to suppress sending. Change values via administration panel with in '
                 'Flicket.')
 
+def create_initial_ticket():
+    user = FlicketUser.query.filter_by(username='admin').first()
+    title = "Ticket Deletion"
+    content = (
+        "Your mission is clear: DELETE this ticket entirely. Closing it won't be enough! "
+        "Only complete deletion will unlock the flag. Are you skilled enough to solve this challenge?"
+    )
+    priority = 1
+    category = 2
+    hours = 2
+
+    FlicketTicketExt.create_ticket(
+        title=title,
+        user=user,
+        content=content,
+        priority=priority,
+        category=category,
+        hours=hours
+    )
+
 
 def register_clicks(app):
     """
@@ -278,6 +297,7 @@ def register_clicks(app):
         create_default_depts()
         # commit changes to the database
         db.session.commit()
+        create_initial_ticket()
 
     @app.cli.command('export-users-to-json', help='Export all users from database to json file.')
     def export_users_to_json():

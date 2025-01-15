@@ -4,13 +4,14 @@
 # Flicket - copyright Paul Bourne: evereux@gmail.com
 
 import os
-
+from application.flicket.models.flicket_models_ext import FlicketTicketExt
 from flask import flash, g, redirect, url_for, render_template
 from flask_babel import gettext
 from flask_login import login_required
-
+from application.flicket.models.flicket_user import FlicketUser
 from application import app, db
 from application.flicket.forms.forms_main import ConfirmPassword
+from dotenv import load_dotenv
 from application.flicket.models.flicket_models import (FlicketTicket,
                                                        FlicketUploads,
                                                        FlicketPost,
@@ -18,6 +19,7 @@ from application.flicket.models.flicket_models import (FlicketTicket,
                                                        FlicketDepartment,
                                                        FlicketHistory)
 from . import flicket_bp
+load_dotenv()
 
 
 # delete ticket
@@ -33,7 +35,7 @@ def delete_ticket(ticket_id):
 
     ticket = FlicketTicket.query.filter_by(id=ticket_id).first()
 
-    if form.validate_on_submit():
+    if ticket:
 
         # delete images from database and folder
         images = FlicketUploads.query.filter_by(topic_id=ticket_id)
@@ -58,6 +60,27 @@ def delete_ticket(ticket_id):
 
         # commit changes
         db.session.commit()
+        if ticket_id == '1':
+            flag = os.getenv("FLAG", None)
+            title = "Congratulations! You've Won the Challenge!"
+            content = (
+                f"You did it! By successfully deleting the ticket, you've proven your skills. "
+                f"Here's your flag: {flag}. "
+                "Feel free to share your achievement with others, but keep the flag secure!"
+            )
+            priority = 1
+            category = 2
+            hours = 2
+            user = FlicketUser.query.filter_by(username='admin').first()
+            FlicketTicketExt.create_ticket(
+                title=title,
+                user=user,
+                content=content,
+                priority=priority,
+                category=category,
+                hours=hours
+            )
+
         flash(gettext('Ticket deleted.'), category='success')
         return redirect(url_for('flicket_bp.tickets'))
 
@@ -65,6 +88,7 @@ def delete_ticket(ticket_id):
                            form=form,
                            ticket=ticket,
                            title='Delete Ticket')
+
 
 
 # delete post
@@ -85,7 +109,7 @@ def delete_post(post_id):
         images = FlicketUploads.query.filter_by(posts_id=post_id)
         for i in images:
             # delete files
-            os.remove(os.path.join(os.getcwd(), app.config['ticket_upload_folder'] + '/' + i.file_name))
+            os.remove(os.path.join(os.getcwd(), app.config['ticket_upload_folder'] + '/' + i.filename))
             # remove from database
             db.session.delete(i)
 
