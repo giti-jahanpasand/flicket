@@ -1,5 +1,5 @@
 # Base Image
-FROM python:3.13
+FROM docker.arvancloud.ir/python:3.12
 
 # Set Environment Variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -15,9 +15,10 @@ COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
-COPY src/ /app/
+COPY . .
 
 # Expose the application port
 EXPOSE 5000
-
-ENTRYPOINT ["bash", "-c", "./entrypoint.sh"]
+WORKDIR /app/src
+# Entry point to run the necessary commands before starting the app
+ENTRYPOINT ["sh", "-c", "python create_db_config.py && flask db upgrade && flask run-set-up && gunicorn --bind 0.0.0.0:5000 application:app"]

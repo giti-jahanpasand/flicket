@@ -6,7 +6,7 @@ import json
 from getpass import getpass
 import os
 import time
-
+from dotenv import load_dotenv
 from sqlalchemy import or_
 
 from scripts.create_json import WriteConfigJson
@@ -22,6 +22,8 @@ from application.flicket.models.flicket_user import FlicketUser
 from application.flicket.scripts.email import FlicketMail
 from application.flicket.scripts.flicket_user_details import FlicketUserDetails
 from application.flicket.scripts.hash_password import hash_password
+
+
 
 admin = 'admin'
 
@@ -200,26 +202,20 @@ def create_notifier():
 
 
 def get_admin_details():
-    # todo: add some password validation to prevent easy passwords being entered
-    _username = admin
-    match = False
+    load_dotenv()
 
-    email = input("Enter admin email: ")
+    _username = "admin"  # Define the username
+    email = os.getenv("ADMIN_EMAIL", None)
+    password = os.getenv("ADMIN_PASSWORD", None)
 
-    while match is False:
-        password1 = getpass("Enter password: ")
-        password2 = getpass("Re-enter password: ")
+    if not email or not password:
+        raise ValueError("ADMIN_EMAIL or ADMIN_PASSWORD is not set in the environment variables.")
 
-        if password1 != password2:
-            print("Passwords do not match, please try again.\n\n")
-            match = False
-        else:
-            return _username, password1, email
+    return _username, password, email
 
 
 def set_db_config_defaults(silent=False):
-    print('Please enter site base url including port. For example this would be "http://192.168.1.1:8000".')
-    base_url = input('Base url> ')
+    base_url = 'http://127.0.0.1:5000'
 
     count = FlicketConfig.query.count()
     if count > 0:
