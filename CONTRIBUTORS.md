@@ -1,5 +1,0 @@
-# CONTRIBUTORS
-
-* SolvingCurves
-* xdml
-* juanvmarquezl 
