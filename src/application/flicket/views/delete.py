@@ -4,22 +4,24 @@
 # Flicket - copyright Paul Bourne: evereux@gmail.com
 
 import os
+import time
+from flask import request
 from application.flicket.models.flicket_models_ext import FlicketTicketExt
 from flask import flash, g, redirect, url_for, render_template
 from flask_babel import gettext
 from flask_login import login_required
 from application.flicket.models.flicket_user import FlicketUser
 from application import app, db
-from application.flicket.forms.forms_main import ConfirmPassword
-from dotenv import load_dotenv
+from application.flicket.forms.forms_main import ConfirmPassword, MathChallengeForm
 from application.flicket.models.flicket_models import (FlicketTicket,
                                                        FlicketUploads,
                                                        FlicketPost,
                                                        FlicketCategory,
                                                        FlicketDepartment,
-                                                       FlicketHistory)
+                                                       FlicketHistory,
+                                                       MathChallenge)
 from . import flicket_bp
-load_dotenv()
+import random
 
 
 # delete ticket
@@ -31,63 +33,90 @@ def delete_ticket(ticket_id):
         flash(gettext('You are not authorised to delete tickets.'), category='warning')
         return redirect(url_for('flicket_bp.ticket_view', ticket_id=ticket_id))
 
-    form = ConfirmPassword()
-
     ticket = FlicketTicket.query.filter_by(id=ticket_id).first()
-
-    if ticket:
-
-        # delete images from database and folder
-        images = FlicketUploads.query.filter_by(topic_id=ticket_id)
-        for i in images:
-            # delete files
-            os.remove(os.path.join(os.getcwd(), app.config['ticket_upload_folder'] + '/' + i.file_name))
-            # remove from database
-            db.session.delete(i)
-
-        # remove posts for ticket.
-        for post in ticket.posts:
-            # remove history
-            history = FlicketHistory.query.filter_by(post=post).all()
-            for h in history:
-                db.session.delete(h)
-            post.user.total_posts -= 1
-            db.session.delete(post)
-
-        user = ticket.user
-        user.total_posts -= 1
-        db.session.delete(ticket)
-
-        # commit changes
-        db.session.commit()
-        if ticket_id == '1':
-            flag = os.getenv("FLAG", None)
-            title = "Congratulations! You've Won the Challenge!"
-            content = (
-                f"You did it! By successfully deleting the ticket, you've proven your skills. "
-                f"Here's your flag: {flag}. "
-                "Feel free to share your achievement with others, but keep the flag secure!"
-            )
-            priority = 1
-            category = 2
-            hours = 2
-            user = FlicketUser.query.filter_by(username='admin').first()
-            FlicketTicketExt.create_ticket(
-                title=title,
-                user=user,
-                content=content,
-                priority=priority,
-                category=category,
-                hours=hours
-            )
-
-        flash(gettext('Ticket deleted.'), category='success')
+    if not ticket:
+        flash(gettext('Ticket not found.'), category='danger')
         return redirect(url_for('flicket_bp.tickets'))
+
+    form = MathChallengeForm()
+
+    if request.method == 'GET':
+        num1 = random.randint(1, 20)
+        num2 = random.randint(1, 20)
+        answer = num1 + num2
+        existing_challenge = db.session.query(MathChallenge).filter(MathChallenge.ticket_id == ticket_id).first()
+
+        if existing_challenge:
+            existing_challenge.answer = answer
+        else:
+            challenge = MathChallenge(ticket_id=ticket_id, answer=answer)
+            db.session.add(challenge)
+
+        db.session.commit()
+
+    elif form.validate_on_submit():
+        challenge = MathChallenge.query.filter_by(ticket_id=ticket_id).first()
+        if not challenge:
+            flash(gettext('please frist request by get to get captcha Please try again.'), category='danger')
+            return redirect(url_for('flicket_bp.delete_ticket', ticket_id=ticket_id))
+        if form.answer.data == challenge.answer:
+            # delete images from database and folder
+            images = FlicketUploads.query.filter_by(topic_id=ticket_id)
+            for i in images:
+                # delete files
+                os.remove(os.path.join(os.getcwd(), app.config['ticket_upload_folder'] + '/' + i.file_name))
+                # remove from database
+                db.session.delete(i)
+
+            # remove posts for ticket.
+            for post in ticket.posts:
+                # remove history
+                history = FlicketHistory.query.filter_by(post=post).all()
+                for h in history:
+                    db.session.delete(h)
+                post.user.total_posts -= 1
+                db.session.delete(post)
+
+            user = ticket.user
+            user.total_posts -= 1
+            db.session.delete(ticket)
+
+            # commit changes
+            db.session.commit()
+            if ticket_id == '1':
+                flag = os.getenv("FLAG", None)
+                title = "Congratulations! You've Won the Challenge!"
+                content = (
+                    f"You did it! By successfully deleting the ticket, you've proven your skills. "
+                    f"Here's your flag: {flag}. "
+                    "Feel free to share your achievement with others, but keep the flag secure!"
+                )
+                priority = 1
+                category = 2
+                hours = 2
+                user = FlicketUser.query.filter_by(username='admin').first()
+                FlicketTicketExt.create_ticket(
+                    title=title,
+                    user=user,
+                    content=content,
+                    priority=priority,
+                    category=category,
+                    hours=hours
+                )
+
+            flash(gettext('Ticket deleted.'), category='success')
+            return redirect(url_for('flicket_bp.tickets'))
+
+        else:
+            flash(gettext('Wrong answer. Try again.'), category='danger')
+            return redirect(url_for('flicket_bp.delete_ticket', ticket_id=ticket_id))
 
     return render_template('flicket_deletetopic.html',
                            form=form,
                            ticket=ticket,
-                           title='Delete Ticket')
+                           title='Delete Ticket',
+                           num1=num1,
+                           num2=num2)
 
 
 
@@ -109,7 +138,7 @@ def delete_post(post_id):
         images = FlicketUploads.query.filter_by(posts_id=post_id)
         for i in images:
             # delete files
-            os.remove(os.path.join(os.getcwd(), app.config['ticket_upload_folder'] + '/' + i.filename))
+            os.remove(os.path.join(os.getcwd(), app.config['ticket_upload_folder'] + '/' + i.file_name))
             # remove from database
             db.session.delete(i)
 

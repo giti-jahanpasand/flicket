@@ -897,3 +897,10 @@ class FlicketDepartmentCategory(PaginatedAPIMixin, Base):
     def __repr__(self):
         return (f"<FlicketDepartmentCategory: department_category='{self.department_category}',"
                 f" category_id={self.category_id}>")
+
+
+class MathChallenge(Base):
+    __tablename__ = 'flicket_math_challenge'
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, )
+    answer = db.Column(db.Integer,)

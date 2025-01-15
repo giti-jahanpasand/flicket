@@ -8,7 +8,6 @@
                 {{ form.hidden_tag() }}
 
                 <div class="col">
-
                     <div class="row">
                         <div class="col">
                             <h1>{{ title }}</h1>
@@ -22,19 +21,20 @@
 
 
                     <div class="row">
-                        <label class="col-3 col-form-label">{{ _('Password') }}</label>
                         <div class="col-5">
-                            {{ form.password(class="form-control form-control-sm") }}
+                            <p>{{ num1 }} + {{ num2 }}</p>
+                                        <label for="answer">{{ form.answer.label }}</label>
+            {{ form.answer() }}
                         </div>
                         <div class="col">
                             <input class="btn btn-danger btn-sm" type="submit" name="delete" value="delete ticket"/>
                         </div>
                     </div>
 
-                    {% if form.password.errors %}
+                    {% if form.answer.errors %}
                         <div class="row m-2"></div>
                         <div class="alert alert-warning small">
-                            {% for error in form.password.errors %}
+                            {% for error in form.answer.errors %}
                                 {{ error }}
                             {% endfor %}
                         </div>
