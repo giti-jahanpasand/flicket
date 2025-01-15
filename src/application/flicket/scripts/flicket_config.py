@@ -13,13 +13,9 @@ def set_flicket_config():
     :return:
     """
     config = FlicketConfig.query.first()
-    try:
-        posts_per_page = config.posts_per_page
-    except AttributeError:
-        raise AttributeError('No FlicketConfig object is in db did you run "flask run-set-up" ?')
 
     app.config.update(
-        posts_per_page=posts_per_page,
+        posts_per_page=config.posts_per_page,
         allowed_extensions=config.allowed_extensions.split(', '),
         ticket_upload_folder=config.ticket_upload_folder,
         avatar_upload_folder=config.avatar_upload_folder,

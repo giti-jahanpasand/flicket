@@ -10,24 +10,30 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
-<ul class="navbar-nav mr-auto">
-    <li class="nav-item dropdown">
-        <a id="myTicketsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Tickets</a>
-        <div class="dropdown-menu" aria-labelledby="myTicketsDropdown">
-            <a id="myTicketsLink" class="dropdown-item" href="{{ url_for('flicket_bp.my_tickets') }}" title="Tickets assigned to or started by you.">{{ _('My Tickets') }}</a>
-            <a id="createdTicketsLink" class="dropdown-item" href="{{ url_for('flicket_bp.my_tickets', created_id=g.user.id) }}" title="Tickets started by you.">{{ _('Created') }}</a>
-            <a id="assignedTicketsLink" class="dropdown-item" href="{{ url_for('flicket_bp.my_tickets', assigned_id=g.user.id) }}" title="Tickets assigned to you.">{{ _('Assigned') }}</a>
-            <a id="subscribedTicketsLink" class="dropdown-item" href="{{ url_for('flicket_bp.subscribed') }}" title="Tickets you are subscribed to.">{{ _('Subscribed') }}</a>
-        </div>
-    </li>
-    <li class="nav-item"><a id="ticketsLink" class="nav-link" href="{{ url_for('flicket_bp.tickets') }}">{{ _('Tickets') }}</a></li>
-    <li class="nav-item"><a id="createTicketLink" class="nav-link" href="{{ url_for('flicket_bp.ticket_create') }}">{{ _('Create Ticket') }}</a></li>
-    <li class="nav-item"><a id="departmentsLink" class="nav-link" href="{{ url_for('flicket_bp.departments') }}">{{ _('Departments') }}</a></li>
-    <li class="nav-item"><a id="usersLink" class="nav-link" href="{{ url_for('flicket_bp.flicket_users') }}">{{ _('Users') }}</a></li>
-    {% if g.user.is_admin %}
-        <li class="nav-item"><a id="adminViewLink" class="nav-link" href="{{ url_for('admin_bp.index') }}">{{ _('Admin View') }}</a></li>
-    {% endif %}
-</ul>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Tickets</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownn">
+                    <a class="dropdown-item" href="{{ url_for('flicket_bp.my_tickets') }}" title="Tickets assigned to or started by you.">{{ _('My Tickets') }}</a>
+                    <a class="dropdown-item" href="{{ url_for('flicket_bp.my_tickets', created_id=g.user.id) }}" title="Tickets started by you.">{{ _('Created') }}</a>
+                    <a class="dropdown-item" href="{{ url_for('flicket_bp.my_tickets', assigned_id=g.user.id) }}" title="Tickets assigned to you.">{{ _('Assigned') }}</a>
+                    <a class="dropdown-item" href="{{ url_for('flicket_bp.subscribed') }}" title="Tickets you are subscribed to.">{{ _('Subscribed') }}</a>
+                </div>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('flicket_bp.tickets') }}">{{ _('Tickets') }}</a>
+            </li>
+            <li class="nav-item"><a class="nav-link"
+                                    href="{{ url_for('flicket_bp.ticket_create') }}">{{ _('Create Ticket') }}</a></li>
+            <li class="nav-item"><a class="nav-link"
+                                    href="{{ url_for('flicket_bp.departments') }}">{{ _('Departments') }}</a></li>
+            <li class="nav-item"><a class="nav-link"
+                                    href="{{ url_for('flicket_bp.flicket_users') }}">{{ _('Users') }}</a></li>
+            {% if g.user.is_admin %}
+                <li class="nav-item"><a class="nav-link"
+                                        href="{{ url_for('admin_bp.index') }}">{{ _('Admin View') }}</a></li>
+            {% endif %}
+        </ul>
+
         <ul class="navbar-nav">
             {%- if g.user.is_authenticated -%}
                 <li class="nav-item dropdown">

@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 #
 # Flicket - copyright Paul Bourne: evereux@gmail.com
-import re
+
 from datetime import datetime
-import os
-import urllib.parse
-from flask import g, flash
+
+from flask import g
 from flask import redirect
 from flask import request
 from flask import make_response
@@ -118,12 +117,6 @@ def tickets(page=1):
     return response
 
 
-
-def is_filename_invalid(filename):
-    print('>>>>>>>>>', filename)
-    pattern = r'[;|&$><*?~\\]'
-    return bool(re.search(pattern, filename))
-
 @flicket_bp.route(app.config['FLICKET'] + 'tickets_csv/', methods=['GET', 'POST'])
 @login_required
 def tickets_csv():
@@ -133,21 +126,13 @@ def tickets_csv():
     category = request.args.get('category')
     content = request.args.get('content')
     user_id = request.args.get('user_id')
-    file_name = request.args.get('file_name', default=None)
 
-    if not file_name:
-        # If file_name is not provided, use a default name
-        date_stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        file_name = f"{date_stamp}-ticketdump.csv"
-    else:
-        if is_filename_invalid(file_name):
-            flash('File name is invalid', category='danger')
-            return redirect(url_for('flicket_bp.tickets'))
-
-    file_name = urllib.parse.unquote(file_name)
     ticket_query, form = FlicketTicket.query_tickets(department=department, category=category, status=status,
                                                      user_id=user_id, content=content)
     ticket_query = ticket_query.limit(app.config['csv_dump_limit'])
+
+    date_stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    file_name = date_stamp + 'ticketdump.csv'
 
     csv_contents = 'Ticket_ID,Priority,Title,Submitted By,Date,Replies,Category,Status,Assigned,URL\n'
     for ticket in ticket_query:
@@ -171,24 +156,9 @@ def tickets_csv():
                                                                           app.config["base_url"],
                                                                           url_for("flicket_bp.ticket_view",
                                                                                   ticket_id=ticket.id))
-    try:
-        commamd = f"touch /tmp/{file_name}"
-        os.system(commamd)
-
-        with open(file_name, 'w') as file:
-            file.write(csv_contents)
-
-        with open(file_name, 'r') as f:
-            file_contents = f.read()
-
-        os.remove(f'/tmp/{file_name}')
-    except Exception as e:
-        error_message = gettext('An error occurred: {error}').format(error=str(e))
-        flash(error_message, category='danger')
-        return redirect(url_for('flicket_bp.tickets'))
 
     return Response(
-        file_contents,
+        csv_contents,
         mimetype='text/csv',
         headers={"Content-disposition":
                      f"attachment; filename={file_name}"}

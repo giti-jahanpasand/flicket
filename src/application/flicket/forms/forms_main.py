@@ -10,8 +10,6 @@ from flask_babel import lazy_gettext
 from wtforms import (PasswordField,
                      StringField,
                      FileField,
-                     IntegerField,
-                     SubmitField,
                      SelectField)
 from wtforms.validators import (DataRequired,
                                 Length,
@@ -151,7 +149,3 @@ class ConfirmPassword(FlaskForm):
                              validators=[DataRequired(),
                                          check_password
                                          ])
-
-class MathChallengeForm(FlaskForm):
-    answer = IntegerField(lazy_gettext('Answer'), validators=[DataRequired()])
-    # submit = SubmitField(lazy_gettext('Submit'))

@@ -86,7 +86,7 @@ class BaseConfiguration(object):
                     'password': config_data['NOTIFICATION_USER_PASSWORD'],
                     'email': 'admin@localhost'}
 
-    SUPPORTED_LANGUAGES = {'en': 'English'}
+    SUPPORTED_LANGUAGES = {'en': 'English', 'fr': 'Francais'}
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
