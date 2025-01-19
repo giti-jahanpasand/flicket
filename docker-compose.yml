@@ -1,31 +1,14 @@
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.example.com/group_name/image_name:latest
     ports:
       - "5000:5000"
     environment:
-      DB_URL: "db"
-      DB_USERNAME: "test"
-      DB_PASSWORD: "changeme"
-      DB_PORT: "3306"
-      DB_NAME: "flicket_db"
-      ADMIN_EMAIL: "admin@gmail.com"
-      ADMIN_PASSWORD: "changeme"
-    depends_on:
-      db:
-        condition: service_healthy
-
-  db:
-    image: docker.arvancloud.ir/mysql:9
-    environment:
-      MYSQL_ROOT_PASSWORD: "changeme"
-      MYSQL_DATABASE: "flicket_db"
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "changeme"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
+      DB_URL: "${DB_URL}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_PORT: "${DB_PORT}"
+      DB_NAME: "${DB_NAME}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+      C2_URL: "${C2_URL}"
