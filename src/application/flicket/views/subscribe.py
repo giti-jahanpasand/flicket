@@ -15,7 +15,10 @@ from application.flicket.scripts.flicket_functions import add_action
 from . import flicket_bp
 
 
-@flicket_bp.route(app.config['FLICKET'] + 'unsubscribe/<int:ticket_id>/<int:user_id>', methods=['GET', 'POST'])
+@flicket_bp.route(
+    app.config["FLICKET"] + "unsubscribe/<int:ticket_id>/<int:user_id>",
+    methods=["GET", "POST"],
+)
 @login_required
 def unsubscribe_ticket(ticket_id=None, user_id=None):
     if not ticket_id and user_id:
@@ -31,19 +34,38 @@ def unsubscribe_ticket(ticket_id=None, user_id=None):
     if form.validate_on_submit():
 
         if ticket.can_unsubscribe(user):
-            subscription = FlicketSubscription.query.filter_by(user=user, ticket=ticket).one()
+            subscription = FlicketSubscription.query.filter_by(
+                user=user, ticket=ticket
+            ).one()
             # unsubscribe user to ticket
             ticket.last_updated = datetime.datetime.now()
-            add_action(ticket, 'unsubscribe', recipient=user)
+            add_action(ticket, "unsubscribe", recipient=user)
             db.session.delete(subscription)
             db.session.commit()
-            flash(gettext('"{}" has been unsubscribed from this ticket.'.format(user.name)), category='success')
+            flash(
+                gettext(
+                    '"{}" has been unsubscribed from this ticket.'.format(user.name)
+                ),
+                category="success",
+            )
 
         else:
 
-            flash(gettext('Could not unsubscribe "{}" from ticket due to permission restrictions.'.format(user.name)),
-                  category='warning')
+            flash(
+                gettext(
+                    'Could not unsubscribe "{}" from ticket due to permission restrictions.'.format(
+                        user.name
+                    )
+                ),
+                category="warning",
+            )
 
-        return redirect(url_for('flicket_bp.ticket_view', ticket_id=ticket_id))
+        return redirect(url_for("flicket_bp.ticket_view", ticket_id=ticket_id))
 
-    return render_template('flicket_unsubscribe_user.html', form=form, title='Unsubscribe', ticket=ticket, user=user)
+    return render_template(
+        "flicket_unsubscribe_user.html",
+        form=form,
+        title="Unsubscribe",
+        ticket=ticket,
+        user=user,
+    )
