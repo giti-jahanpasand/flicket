@@ -1,29 +1,25 @@
 #! usr/bin/python3
 # -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 from flask import request
 from flask import url_for
-from flask_babel import lazy_gettext
-from flask_pagedown.fields import PageDownField
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, HiddenField, SubmitField, FileField, DecimalField
+from flask_babel import gettext
+from flask_babel import lazy_gettext
 from wtforms.fields import SelectMultipleField
+from flask_pagedown.fields import PageDownField
 from wtforms.validators import DataRequired, Length
 from wtforms.widgets import ListWidget, CheckboxInput
-
 from application.flicket.models.flicket_models import field_size
-from application.flicket.models.flicket_models import FlicketCategory
-from application.flicket.models.flicket_models import FlicketDepartment
-from application.flicket.models.flicket_models import FlicketDepartmentCategory
-from application.flicket.models.flicket_models import FlicketPriority
 from application.flicket.models.flicket_models import FlicketStatus
 from application.flicket.models.flicket_models import FlicketTicket
+from application.flicket.models.flicket_models import FlicketPriority
+from application.flicket.models.flicket_models import FlicketCategory
+from application.flicket.models.flicket_models import FlicketDepartment
+from application.flicket_admin.models.flicket_config import FlicketConfig
+from application.flicket.models.flicket_models import FlicketDepartmentCategory
 from application.flicket.models.flicket_user import FlicketUser, user_field_size
 from application.flicket.scripts.upload_choice_generator import generate_choices
-from application.flicket_admin.models.flicket_config import FlicketConfig
-from flask_babel import gettext
+from wtforms import StringField, SelectField, HiddenField, SubmitField, FileField, DecimalField
 
 form_class_button = {'class': 'btn btn-primary btn-sm'}
 form_class_button_sm = {'class': 'btn btn-primary btn-sm'}

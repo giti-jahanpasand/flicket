@@ -4,21 +4,20 @@
 # Flicket - copyright Paul Bourne: evereux@gmail.com
 
 import bcrypt
+from application import app
 from flask_wtf import FlaskForm
-from flask_babel import lazy_gettext
 from sqlalchemy import func, or_
-from wtforms import BooleanField
-from wtforms import PasswordField
 from wtforms import StringField
 from wtforms import SubmitField
+from wtforms import BooleanField
+from wtforms import PasswordField
+from flask_babel import lazy_gettext
 from wtforms.validators import DataRequired
-
-from application import app
-from application.flicket.models.flicket_user import FlicketUser
-from application.flicket.scripts.hash_password import hash_password
-from application.flicket_admin.views.view_admin import create_user
-from application.flicket.forms.flicket_forms import form_class_button
 from scripts.login_functions import nt_log_on
+from application.flicket.models.flicket_user import FlicketUser
+from application.flicket_admin.views.view_admin import create_user
+from application.flicket.scripts.hash_password import hash_password
+from application.flicket.forms.flicket_forms import form_class_button
 
 
 def login_user_exist(form, field):

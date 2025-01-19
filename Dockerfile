@@ -23,5 +23,4 @@ WORKDIR /app/src
 
 COPY entrypoint.sh .
 RUN chmod +x ./entrypoint.sh
-# Entry point to run the necessary commands before starting the app
 ENTRYPOINT ["bash", "-c", "./entrypoint.sh"]
