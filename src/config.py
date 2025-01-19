@@ -30,7 +30,6 @@ class BaseConfiguration(object):
         # user login information for database user.
         db_username = config_data['db_username']
         db_password = config_data['db_password']
-        # database connection details
         db_url = config_data['db_url']
         db_port = config_data['db_port']
         db_name = config_data['db_name']
@@ -89,7 +88,6 @@ class BaseConfiguration(object):
     SUPPORTED_LANGUAGES = {'en': 'English'}
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
-
     check_db_connection(SQLALCHEMY_DATABASE_URI)
 
 

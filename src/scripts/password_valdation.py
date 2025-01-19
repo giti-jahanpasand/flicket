@@ -20,7 +20,7 @@ class PasswordStrength:
         # currently not supported
         # todo: added special characters requirements
         self.special_characters = special_characters
-
+    # Check password
     def is_valid(self):
         minimum_length = False
         has_digits = False

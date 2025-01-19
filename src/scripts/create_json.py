@@ -1,15 +1,12 @@
 #! usr/bin/python3
 # -*- coding: utf-8 -*-
 
-
-from base64 import b64encode
-from getpass import getpass
-import json
 import os
-
+import json
+from getpass import getpass
+from base64 import b64encode
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
-
 from scripts.password_valdation import PasswordStrength
 
 config_file = 'config.json'
@@ -17,7 +14,6 @@ config_file = os.path.join(os.getcwd(), config_file)
 
 
 class WriteConfigJson:
-
     @staticmethod
     def json_exists():
         if os.path.isfile(config_file):
