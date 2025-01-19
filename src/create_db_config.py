@@ -49,7 +49,6 @@ class WriteConfigJson:
             print('Writing config file to {}'.format(config_file))
             json.dump(config_values, f)
 
-
 def check_db_connection(sqlalchemy_database_uri):
     """
     :param sqlalchemy_database_uri:
@@ -65,7 +64,6 @@ def check_db_connection(sqlalchemy_database_uri):
         raise Exception(base_error_message)
     except OperationalError:
         raise Exception(base_error_message)
-
 
 if __name__ == '__main__':
     WriteConfigJson.create_file()
