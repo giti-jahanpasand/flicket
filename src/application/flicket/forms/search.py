@@ -6,7 +6,6 @@
 from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField
-
 from .flicket_forms import does_user_exist
 from application.flicket.models.flicket_models import FlicketDepartment
 from application.flicket.models.flicket_models import FlicketCategory
@@ -18,8 +17,6 @@ class SearchTicketForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         form = super(SearchTicketForm, self).__init__(*args, **kwargs)
 
-        # choices are populated via ajax query on page load. This are simply empty lists so
-        # form can be loaded on page view
         self.department.choices = [(d.id, d.department) for d in
                                    FlicketDepartment.query.order_by(FlicketDepartment.department.asc()).all()]
         self.department.choices.insert(0, (0, 'department'))

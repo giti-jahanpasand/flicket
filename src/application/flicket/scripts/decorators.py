@@ -1,10 +1,8 @@
 #! usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Flicket - copyright Paul Bourne: evereux@gmail.com
 
 from threading import Thread
-
 
 def send_async_email(f):
     """
@@ -13,7 +11,6 @@ def send_async_email(f):
     :param f:
     :return:
     """
-
     def wrapper(*args, **kwargs):
         thr = Thread(target=f, args=args, kwargs=kwargs)
         thr.start()
