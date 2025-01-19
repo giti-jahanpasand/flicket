@@ -3,32 +3,30 @@
 #
 # Flicket - copyright Paul Bourne: evereux@gmail.com
 import os
-from urllib.parse import urlparse, urljoin
-
-from flask import flash
 from flask import g
-from flask import redirect
-from flask import render_template
+from flask import flash
 from flask import request
 from flask import url_for
-from flask_login import current_user
+from sqlalchemy import or_
+from flask import redirect
+from sqlalchemy import func
+from flask_babel import gettext
+from flask import render_template
 from flask_login import login_user
+from application import __version__
 from flask_login import logout_user
 from flask_principal import Identity
+from flask_login import current_user
+from urllib.parse import urlparse, urljoin
 from flask_principal import identity_changed
-from flask_babel import gettext
-from sqlalchemy import func
-from sqlalchemy import or_
-
 from application import app, lm, db, flicket_bp
-from application import __version__
-from application.flicket_admin.models.flicket_config import FlicketConfig
-from application.flicket.forms.form_login import LogInForm
-from application.flicket.forms.form_login import PasswordResetForm
-from application.flicket.models.flicket_user import FlicketUser
 from application.flicket.scripts.email import FlicketMail
-from application.flicket.scripts.flicket_config import set_flicket_config
+from application.flicket.forms.form_login import LogInForm
+from application.flicket.models.flicket_user import FlicketUser
+from application.flicket.forms.form_login import PasswordResetForm
 from application.flicket.scripts.hash_password import hash_password
+from application.flicket.scripts.flicket_config import set_flicket_config
+from application.flicket_admin.models.flicket_config import FlicketConfig
 
 
 # functions for redirecting user back from whence they came.
