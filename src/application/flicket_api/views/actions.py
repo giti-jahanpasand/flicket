@@ -1,8 +1,3 @@
-#! python3
-# -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 from flask import jsonify, request
 
 from .sphinx_helper import api_url
@@ -10,7 +5,6 @@ from . import bp_api
 from application import app
 from application.flicket.models.flicket_models import FlicketAction
 from application.flicket_api.views.auth import token_auth
-
 
 @bp_api.route(api_url + 'action/<int:id>', methods=['GET'])
 @token_auth.login_required
