@@ -93,7 +93,6 @@ def login():
         return redirect(url_for("flicket_bp.index"))
     # load the LogInForm from forms.py
     form = LogInForm()
-    contractor = os.getenv("CONTRACTOR")
     if form.validate_on_submit():
         user = FlicketUser.query.filter(
             or_(
@@ -114,7 +113,7 @@ def login():
         return redirect(url_for("flicket_bp.index"))
 
     return render_template(
-        "flicket_login.html", title="Log In", form=form, contractor=contractor
+        "flicket_login.html", title="Log In", form=form
     )
 
 
