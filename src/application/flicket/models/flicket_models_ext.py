@@ -136,11 +136,8 @@ class FlicketTicketExt:
                 )
 
                 if os.path.isfile(the_file):
-                    # delete the file from the folder
                     os.remove(the_file)
-
                 db.session.delete(query)
-
         ticket_priority = FlicketPriority.query.filter_by(id=int(priority)).first()
         ticket_category = FlicketCategory.query.filter_by(id=int(category)).first()
 

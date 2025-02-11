@@ -1,22 +1,12 @@
-#! usr/bin/python3
-# -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 import string
 
 password_length = 8
 
-
 class PasswordStrength:
 
     def __init__(self, password, special_characters=False):
-        """
-        Checks validity of password.
-        :param special_characters:
-        :return:
-        """
         self.password = password
+
         # currently not supported
         # todo: added special characters requirements
         self.special_characters = special_characters

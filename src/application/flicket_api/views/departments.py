@@ -182,8 +182,6 @@ def get_departments():
 @token_auth.login_required
 def create_department():
 
-    # todo add authentication. only those in the admin or super_user groups should be allowed to create.
-
     data = request.get_json() or {}
 
     if 'department' not in data:
