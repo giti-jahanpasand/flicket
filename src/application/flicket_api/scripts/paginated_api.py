@@ -27,6 +27,4 @@ class PaginatedAPIMixin(object):
                 else None,
             },
         }
-
         return data
-

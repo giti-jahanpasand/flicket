@@ -11,7 +11,6 @@ from application.flicket_api.views.auth import token_auth
 def get_action(id):
     return jsonify(FlicketAction.query.get_or_404(id).to_dict())
 
-
 @bp_api.route(api_url + 'actions/<int:ticket_id>', methods=['GET'])
 @token_auth.login_required
 def get_actions(ticket_id):

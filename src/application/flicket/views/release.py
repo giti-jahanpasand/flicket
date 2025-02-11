@@ -1,8 +1,3 @@
-#! usr/bin/python3
-# -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 import datetime
 
 from flask import redirect, url_for, flash, g
