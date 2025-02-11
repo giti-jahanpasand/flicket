@@ -1,10 +1,4 @@
-#! usr/bin/python3
-# -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 from flask import url_for
-
 from application import app
 
 

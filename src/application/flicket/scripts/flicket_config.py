@@ -1,12 +1,5 @@
-#! usr/bin/python3
-# -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 from application import app
 from application.flicket_admin.models.flicket_config import FlicketConfig
-
-
 def set_flicket_config():
     config = FlicketConfig.query.first()
     try:
@@ -15,7 +8,6 @@ def set_flicket_config():
         raise AttributeError(
             'No FlicketConfig object is in db did you run "flask run-set-up" ?'
         )
-
     app.config.update(
         posts_per_page=posts_per_page,
         allowed_extensions=config.allowed_extensions.split(", "),
