@@ -1,8 +1,3 @@
-#! usr/bin/python3
-# -*- coding: utf-8 -*-
-#
-# Flicket - copyright Paul Bourne: evereux@gmail.com
-
 import bcrypt
 from application import app
 from flask_wtf import FlaskForm
@@ -27,7 +22,6 @@ def login_user_exist(form, field):
     :param field:
     :return True False:
     """
-
     username = form.username.data
     password = form.password.data
 
@@ -94,7 +88,6 @@ def is_disabled(form, field):
 
 class LogInForm(FlaskForm):
     """Log in form."""
-
     username = StringField(
         lazy_gettext("username"),
         validators=[DataRequired(), login_user_exist, is_disabled],
