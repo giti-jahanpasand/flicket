@@ -88,6 +88,7 @@ def is_disabled(form, field):
 
 class LogInForm(FlaskForm):
     """Log in form."""
+
     username = StringField(
         lazy_gettext("username"),
         validators=[DataRequired(), login_user_exist, is_disabled],
@@ -98,5 +99,6 @@ class LogInForm(FlaskForm):
 
 class PasswordResetForm(FlaskForm):
     """Log in form."""
+
     email = StringField(lazy_gettext("email"), validators=[DataRequired()])
     submit = SubmitField(lazy_gettext("reset password"), render_kw=form_class_button)
