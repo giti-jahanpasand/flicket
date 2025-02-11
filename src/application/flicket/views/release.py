@@ -20,12 +20,10 @@ def release(ticket_id=False):
 
         ticket = FlicketTicket.query.filter_by(id=ticket_id).first()
 
-        # is ticket assigned.
         if not ticket.assigned:
             flash(gettext('Ticket has not been assigned'), category='warning')
             return redirect(url_for('flicket_bp.ticket_view', ticket_id=ticket_id))
 
-        # check ticket is owned by user or user is admin
         if (ticket.assigned.id != g.user.id) and (not g.user.is_admin):
             flash(gettext('You can not release a ticket you are not working on.'), category='warning')
             return redirect(url_for('flicket_bp.ticket_view', ticket_id=ticket_id))
@@ -40,10 +38,8 @@ def release(ticket_id=False):
 
         db.session.commit()
 
-        # add action record
         add_action(ticket, 'release')
 
-        # send email to state ticket has been released.
         f_mail = FlicketMail()
         f_mail.release_ticket(ticket)
 
