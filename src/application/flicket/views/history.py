@@ -19,13 +19,11 @@ def flicket_history_topic(topic_id):
     ticket = FlicketTicket.query.filter_by(id=topic_id).one()
 
     title = gettext('History')
-
     return render_template(
         'flicket_history.html',
         title=title,
         history=history,
         ticket=ticket)
-
 
 @flicket_bp.route(app.config['FLICKET'] + 'history/post/<int:post_id>/', methods=['GET', 'POST'])
 @login_required
