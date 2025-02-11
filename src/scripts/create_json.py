@@ -1,6 +1,3 @@
-#! usr/bin/python3
-# -*- coding: utf-8 -*-
-
 import os
 import json
 from getpass import getpass
@@ -24,11 +21,6 @@ class WriteConfigJson:
 
     @staticmethod
     def create_file():
-        """
-        Primarily used for set up purposes only.
-        :return:
-        """
-
         def random_string(bytes_=24):
             b = os.urandom(bytes_)
             return b64encode(b).decode('utf-8')
