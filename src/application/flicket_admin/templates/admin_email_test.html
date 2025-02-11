@@ -4,7 +4,6 @@
     <!-- {{ self._TemplateReference__context.name }} -->
     <div class="container">
         {% include 'admin_menu.html' %}
-
         <div class="row m-2 p2 border rounded bg-white">
             <div class="col">
                 <h1>{{ title }}</h1>
@@ -31,7 +30,6 @@
                 </form>
             </div>
         </div>
-
         <div class="row">
             <div class="col">
                 {% if form.email_address.errors %}
@@ -43,6 +41,5 @@
                 {% endif %}
             </div>
         </div>
-
     </div>
 {% endblock %}

@@ -15,12 +15,6 @@ from application.flicket.models.flicket_user import FlicketUser
 
 
 def login_user_exist(form, field):
-    """
-    Ensure the username exists.
-    :param form:
-    :param field:
-    :return True False:
-    """
     result = FlicketUser.query.filter_by(username=form.username.data)
     if result.count() == 0:
         field.errors.append('Invalid username.')
